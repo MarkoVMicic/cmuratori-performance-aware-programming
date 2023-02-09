@@ -93,7 +93,12 @@ int main(int ArgsCount, char **Args)
 }
 
 /*
-Cycles Elapsed: 37166
-Cycles/Add:     9
-Adds/Cycle:     0.1111111
+Simple Loop:
+    Cycles Elapsed: 42114
+    Cycles/Add:     10
+    Adds/Cycle:     0.1
+Unrolled Loop 2x:
+    Cycles Elapsed: 33224
+    Cycles/Add:     8
+    Adds/Cycle:     0.125
 */
