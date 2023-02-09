@@ -55,7 +55,7 @@ int main(int ArgsCount, char **Args)
 }
 
 /*
-Cycles Elapsed: 19132
-Cycles/Add:     4
-Adds/Cycle:     0.25
+Cycles Elapsed: 42109
+Cycles/Add:     10
+Adds/Cycle:     0.1
 */
