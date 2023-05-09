@@ -30,6 +30,21 @@ u32 __declspec(noinline) Unroll2Scalar(u32 Count, u32 *Input)
     return Sum;
 }
 
+u32 __declspec(noinline) Unroll4Scalar(u32 Count, u32 *Input)
+{
+    u32 Sum = 0;
+    #pragma loop( no_vector )
+    for(u32 Index = 0; Index < Count; Index += 4)
+    {
+        Sum += Input[Index];
+        Sum += Input[Index + 1];
+        Sum += Input[Index + 2];
+        Sum += Input[Index + 3];
+    }
+
+    return Sum;
+}
+
 
 int main(int ArgsCount, char **Args)
 {
@@ -85,6 +100,27 @@ int main(int ArgsCount, char **Args)
     CyclesPerAdd = MinCyclesElapsed / Count;
     AddsPerCycle = 1/CyclesPerAdd;
     printf("Unrolled loop 2x:\n");
+    printf("\tCycles Elapsed: %d\n", MinCyclesElapsed);
+    printf("\tCycles/Add: %f\n", CyclesPerAdd);
+    printf("\tAdds/Cycle: %f\n", AddsPerCycle);
+
+    MinCyclesElapsed = INT_MAX;
+    for(u32 Try = 0; Try < TryCount; ++Try)
+    {
+        // QueryPerformanceCounter(&BeginCycles);
+        BeginCycles = __rdtsc();
+        Unroll4Scalar(Count, Input);    
+        EndCycles = __rdtsc();
+
+        CyclesElapsed = EndCycles - BeginCycles;
+        if(CyclesElapsed < MinCyclesElapsed)
+        {
+            MinCyclesElapsed = CyclesElapsed;
+        }
+    }
+    CyclesPerAdd = MinCyclesElapsed / Count;
+    AddsPerCycle = 1/CyclesPerAdd;
+    printf("Unrolled loop 4x:\n");
     printf("\tCycles Elapsed: %d\n", MinCyclesElapsed);
     printf("\tCycles/Add: %f\n", CyclesPerAdd);
     printf("\tAdds/Cycle: %f\n", AddsPerCycle);
