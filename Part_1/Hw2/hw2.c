@@ -22,7 +22,15 @@ enum op_code GetOpCode(const char Byte)
 
     // Check first 7 bits
     Check = ((Byte >> 1) & 0b01111111);
-    if(Check == MOV_IMMEDIATE_TO_REGISTER_MEMORY)
+    if(Check == MOV_IMMEDIATE_TO_REGISTER_MEMORY) // 0b1100011 w
+    {
+        return Check;
+    }
+    if(Check == MOV_MEMORY_TO_ACCUMULATOR) // 0b1010000 w
+    {
+        return Check;
+    }
+    if(Check == MOV_ACCUMULATOR_TO_MEMORY) // 0b1010001 w
     {
         return Check;
     }
