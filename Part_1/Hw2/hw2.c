@@ -1449,42 +1449,42 @@ void DecodeNonWideRegisterMemoryMove16(int D, int Reg, int RM, int16_t Displacem
         }
         switch(Source)
         {
-            case BX_PLUS_SI_PLUS_D8:
+            case BX_PLUS_SI_PLUS_D16:
             {
                 AppendConstCStringToMStringWithGrow("[bx + si", OutputMString);
 
             } break;
-            case BX_PLUS_DI_PLUS_D8:
+            case BX_PLUS_DI_PLUS_D16:
             {
                 AppendConstCStringToMStringWithGrow("[bx + di", OutputMString);
 
             } break;
-            case BP_PLUS_SI_PLUS_D8:
+            case BP_PLUS_SI_PLUS_D16:
             {
                 AppendConstCStringToMStringWithGrow("[bp + si", OutputMString);
 
             } break;
-            case BP_PLUS_DI_PLUS_D8:
+            case BP_PLUS_DI_PLUS_D16:
             {
                 AppendConstCStringToMStringWithGrow("[bp + di", OutputMString);
 
             } break;
-            case SI_PLUS_D8:
+            case SI_PLUS_D16:
             {
                 AppendConstCStringToMStringWithGrow("[si", OutputMString);
 
             } break;
-            case DI_PLUS_D8:
+            case DI_PLUS_D16:
             {
                 AppendConstCStringToMStringWithGrow("[di", OutputMString);
 
             } break;
-            case BP_PLUS_D8:
+            case BP_PLUS_D16:
             {
                 AppendConstCStringToMStringWithGrow("[bp", OutputMString);
 
             } break;
-            case BX_PLUS_D8:
+            case BX_PLUS_D16:
             {
                 AppendConstCStringToMStringWithGrow("[bx", OutputMString);
 
@@ -1895,6 +1895,188 @@ void DecodeImmediateToRegisterMemoryMov(int W, enum effective_address_mem_mode R
 }
 
 
+void DecodeImmediateToRegisterMemoryMov8(int W, enum effective_address_mem_8_mode RM, int16_t Displacement, int16_t MemoryAddress, struct m_string *OutputMString)
+{
+    char DisplacementString[8];
+    if(Displacement < 0)
+    {
+        Displacement = -Displacement;
+        snprintf(DisplacementString, 8, "%d", Displacement);
+        Displacement = -Displacement;
+    }
+    else if(Displacement > 0)
+    {
+        snprintf(DisplacementString, 8, "%d", Displacement);
+    }
+    else // Displacement == 0
+    {
+        DisplacementString[0] = '\0';
+    }
+    switch(RM)
+    {
+        case BX_PLUS_SI_PLUS_D8:
+        {
+            AppendConstCStringToMStringWithGrow("[bx + si", OutputMString);
+
+        } break;
+        case BX_PLUS_DI_PLUS_D8:
+        {
+            AppendConstCStringToMStringWithGrow("[bx + di", OutputMString);
+
+        } break;
+        case BP_PLUS_SI_PLUS_D8:
+        {
+            AppendConstCStringToMStringWithGrow("[bp + si", OutputMString);
+
+        } break;
+        case BP_PLUS_DI_PLUS_D8:
+        {
+            AppendConstCStringToMStringWithGrow("[bp + di", OutputMString);
+
+        } break;
+        case SI_PLUS_D8:
+        {
+            AppendConstCStringToMStringWithGrow("[si", OutputMString);
+
+        } break;
+        case DI_PLUS_D8:
+        {
+            AppendConstCStringToMStringWithGrow("[di", OutputMString);
+
+        } break;
+        case BP_PLUS_D8:
+        {
+            AppendConstCStringToMStringWithGrow("[bp", OutputMString);
+
+        } break;
+        case BX_PLUS_D8:
+        {
+            AppendConstCStringToMStringWithGrow("[bx", OutputMString);
+
+        } break;
+    }
+
+    if(Displacement != 0)
+    {
+        if(Displacement < 0)
+        {
+            AppendConstCStringToMStringWithGrow(" - ", OutputMString);
+        }
+        else // Displacement > 0
+        {
+            AppendConstCStringToMStringWithGrow(" + ", OutputMString);
+        }
+        AppendConstCStringToMStringWithGrow(DisplacementString, OutputMString);
+    }
+    AppendConstCStringToMStringWithGrow("], ", OutputMString);
+
+    if(W == 0)
+    {
+        AppendConstCStringToMStringWithGrow("byte ", OutputMString);
+    }
+    else // W == 1
+    {
+        AppendConstCStringToMStringWithGrow("word ", OutputMString);
+    }
+    char MemoryAddressString[8];
+    snprintf(MemoryAddressString, 8, "%d", MemoryAddress);
+    AppendConstCStringToMStringWithGrow(MemoryAddressString, OutputMString);
+    AppendConstCStringToMStringWithGrow("\n", OutputMString);
+}
+
+
+void DecodeImmediateToRegisterMemoryMov16(int W, enum effective_address_mem_16_mode RM, int16_t Displacement, int16_t MemoryAddress, struct m_string *OutputMString)
+{
+    char DisplacementString[8];
+    if(Displacement < 0)
+    {
+        Displacement = -Displacement;
+        snprintf(DisplacementString, 8, "%d", Displacement);
+        Displacement = -Displacement;
+    }
+    else if(Displacement > 0)
+    {
+        snprintf(DisplacementString, 8, "%d", Displacement);
+    }
+    else // Displacement == 0
+    {
+        DisplacementString[0] = '\0';
+    }
+
+    switch(RM)
+    {
+        case BX_PLUS_SI_PLUS_D16:
+        {
+            AppendConstCStringToMStringWithGrow("[bx + si", OutputMString);
+
+        } break;
+        case BX_PLUS_DI_PLUS_D16:
+        {
+            AppendConstCStringToMStringWithGrow("[bx + di", OutputMString);
+
+        } break;
+        case BP_PLUS_SI_PLUS_D16:
+        {
+            AppendConstCStringToMStringWithGrow("[bp + si", OutputMString);
+
+        } break;
+        case BP_PLUS_DI_PLUS_D16:
+        {
+            AppendConstCStringToMStringWithGrow("[bp + di", OutputMString);
+
+        } break;
+        case SI_PLUS_D16:
+        {
+            AppendConstCStringToMStringWithGrow("[si", OutputMString);
+
+        } break;
+        case DI_PLUS_D16:
+        {
+            AppendConstCStringToMStringWithGrow("[di", OutputMString);
+
+        } break;
+        case BP_PLUS_D16:
+        {
+            AppendConstCStringToMStringWithGrow("[bp", OutputMString);
+
+        } break;
+        case BX_PLUS_D16:
+        {
+            AppendConstCStringToMStringWithGrow("[bx", OutputMString);
+
+        } break;
+    }
+
+    if(Displacement != 0)
+    {
+        if(Displacement < 0)
+        {
+            AppendConstCStringToMStringWithGrow(" - ", OutputMString);
+        }
+        else // Displacement > 0
+        {
+            AppendConstCStringToMStringWithGrow(" + ", OutputMString);
+        }
+        AppendConstCStringToMStringWithGrow(DisplacementString, OutputMString);
+    }
+    AppendConstCStringToMStringWithGrow("], ", OutputMString);
+
+    if(W == 0)
+    {
+        AppendConstCStringToMStringWithGrow("byte ", OutputMString);
+    }
+    else // W == 1
+    {
+        AppendConstCStringToMStringWithGrow("word ", OutputMString);
+    }
+    char MemoryAddressString[8];
+    snprintf(MemoryAddressString, 8, "%d", MemoryAddress);
+    AppendConstCStringToMStringWithGrow(MemoryAddressString, OutputMString);
+    AppendConstCStringToMStringWithGrow("\n", OutputMString);
+}
+
+
+
 int main(int argc, char **argv)
 {
     if(argc != 3)
@@ -2022,7 +2204,7 @@ int main(int argc, char **argv)
                     int W = CurrentByte & 0b00000001;
                     FGetCResult = fgetc(BinaryFileHandle);
                     CurrentByte = (char)FGetCResult;
-                    enum mod_field Mod = (CurrentByte >> 6) & 0b00000111;
+                    enum mod_field Mod = (CurrentByte >> 6) & 0b00000011;
                     int RM = CurrentByte & 0b00000111;
 
                     switch(Mod)
@@ -2050,9 +2232,77 @@ int main(int argc, char **argv)
                             }
                             DecodeImmediateToRegisterMemoryMov(W, RM, MemoryAddress, OutputMString);
                         } break;
+
+                        case MEM_MODE_8:
+                        {
+                            // 8-bit Displacement, sign-extended to 16 bits
+                            int8_t Displacement8 = 0;
+                            FGetCResult = fgetc(BinaryFileHandle);
+                            CurrentByte = (char)FGetCResult;
+                            Displacement8 = (int8_t)CurrentByte;
+                            int16_t Displacement16 = (int16_t)Displacement8;
+
+                            int16_t MemoryAddress = 0;
+                            if(W == 1)
+                            {
+                                FGetCResult = fgetc(BinaryFileHandle);
+                                CurrentByte = (char)FGetCResult;
+                                MemoryAddress |= CurrentByte;
+                                MemoryAddress &= 0x00FF;
+                                FGetCResult = fgetc(BinaryFileHandle);
+                                CurrentByte = (char)FGetCResult;
+                                MemoryAddress |= (CurrentByte << 8);
+                            }
+                            else // W == 0
+                            {
+                                FGetCResult = fgetc(BinaryFileHandle);
+                                CurrentByte = (char)FGetCResult;
+                                MemoryAddress |= CurrentByte;
+                                MemoryAddress &= 0x00FF;
+                            }
+                            DecodeImmediateToRegisterMemoryMov8(W, RM, Displacement16, MemoryAddress, OutputMString);                            
+
+                        } break;
+
+                        case MEM_MODE_16:
+                        {
+                            // 16-bit Displacement
+                            int16_t Displacement16 = 0;
+                            FGetCResult = fgetc(BinaryFileHandle);
+                            CurrentByte = (char)FGetCResult;
+                            Displacement16 |= CurrentByte;
+                            Displacement16 &= 0x00FF;
+                            FGetCResult = fgetc(BinaryFileHandle);
+                            CurrentByte = (char)FGetCResult;
+                            Displacement16 |= (CurrentByte << 8);
+
+                            int16_t MemoryAddress = 0;
+                            if(W == 1)
+                            {
+                                FGetCResult = fgetc(BinaryFileHandle);
+                                CurrentByte = (char)FGetCResult;
+                                MemoryAddress |= CurrentByte;
+                                MemoryAddress &= 0x00FF;
+                                FGetCResult = fgetc(BinaryFileHandle);
+                                CurrentByte = (char)FGetCResult;
+                                MemoryAddress |= (CurrentByte << 8);
+                            }
+                            else // W == 0
+                            {
+                                FGetCResult = fgetc(BinaryFileHandle);
+                                CurrentByte = (char)FGetCResult;
+                                MemoryAddress |= CurrentByte;
+                                MemoryAddress &= 0x00FF;
+                            }
+                            DecodeImmediateToRegisterMemoryMov16(W, RM, Displacement16, MemoryAddress, OutputMString);                            
+
+                        } break;
+
                     }
 
                 } break;
+
+
 
                 default:
                 {
