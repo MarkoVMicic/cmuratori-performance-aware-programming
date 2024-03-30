@@ -2084,6 +2084,30 @@ void DecodeImmediateToRegisterMemoryMov16(int W, enum effective_address_mem_16_m
 }
 
 
+void DecodeMemoryToAccumulatorMove(int16_t MemoryAddress, struct m_string *OutputMString)
+{
+    char MemoryAddressString[8];
+    snprintf(MemoryAddressString, 8, "%d", MemoryAddress);
+    
+    AppendConstCStringToMStringWithGrow("ax, ", OutputMString);
+    AppendConstCStringToMStringWithGrow("[", OutputMString);
+    AppendConstCStringToMStringWithGrow(MemoryAddressString, OutputMString);  
+    AppendConstCStringToMStringWithGrow("]", OutputMString);
+    AppendConstCStringToMStringWithGrow("\n", OutputMString);  
+}
+
+void DecodeAccumulatorToMemoryMove(int16_t MemoryAddress, struct m_string *OutputMString)
+{
+    char MemoryAddressString[8];
+    snprintf(MemoryAddressString, 8, "%d", MemoryAddress);
+    AppendConstCStringToMStringWithGrow("[", OutputMString);
+    AppendConstCStringToMStringWithGrow(MemoryAddressString, OutputMString);  
+    AppendConstCStringToMStringWithGrow("], ", OutputMString);
+    AppendConstCStringToMStringWithGrow("ax", OutputMString);
+    AppendConstCStringToMStringWithGrow("\n", OutputMString);  
+}
+
+
 
 int main(int argc, char **argv)
 {
@@ -2312,16 +2336,52 @@ int main(int argc, char **argv)
 
                 case MOV_MEMORY_TO_ACCUMULATOR:
                 {
+                    AppendConstCStringToMStringWithGrow("mov ", OutputMString);
                     int W = CurrentByte & 0b00000001;
+                    int16_t MemoryAddress = 0;
                     if(W == 1)
                     {
-                        
+                        FGetCResult = fgetc(BinaryFileHandle);
+                        CurrentByte = (char)FGetCResult;
+                        MemoryAddress |= CurrentByte;
+                        MemoryAddress &= 0x00FF;
+                        FGetCResult = fgetc(BinaryFileHandle);
+                        CurrentByte = (char)FGetCResult;
+                        MemoryAddress |= (CurrentByte << 8);
                     }
                     else // W == 0
                     {
-                        
+                        FGetCResult = fgetc(BinaryFileHandle);
+                        CurrentByte = (char)FGetCResult;
+                        MemoryAddress |= CurrentByte;
+                        MemoryAddress &= 0x00FF;
                     }
+                    DecodeMemoryToAccumulatorMove(MemoryAddress, OutputMString);
+                } break;
 
+            case MOV_ACCUMULATOR_TO_MEMORY:
+                {
+                    AppendConstCStringToMStringWithGrow("mov ", OutputMString);
+                    int W = CurrentByte & 0b00000001;
+                    int16_t MemoryAddress = 0;
+                    if(W == 1)
+                    {
+                        FGetCResult = fgetc(BinaryFileHandle);
+                        CurrentByte = (char)FGetCResult;
+                        MemoryAddress |= CurrentByte;
+                        MemoryAddress &= 0x00FF;
+                        FGetCResult = fgetc(BinaryFileHandle);
+                        CurrentByte = (char)FGetCResult;
+                        MemoryAddress |= (CurrentByte << 8);
+                    }
+                    else // W == 0
+                    {
+                        FGetCResult = fgetc(BinaryFileHandle);
+                        CurrentByte = (char)FGetCResult;
+                        MemoryAddress |= CurrentByte;
+                        MemoryAddress &= 0x00FF;
+                    }
+                    DecodeAccumulatorToMemoryMove(MemoryAddress, OutputMString);
                 } break;
 
                 default:
