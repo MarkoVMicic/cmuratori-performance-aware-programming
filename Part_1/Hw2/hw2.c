@@ -2310,7 +2310,19 @@ int main(int argc, char **argv)
 
                 } break;
 
+                case MOV_MEMORY_TO_ACCUMULATOR:
+                {
+                    int W = CurrentByte & 0b00000001;
+                    if(W == 1)
+                    {
+                        
+                    }
+                    else // W == 0
+                    {
+                        
+                    }
 
+                } break;
 
                 default:
                 {
